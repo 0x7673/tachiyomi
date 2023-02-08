@@ -45,6 +45,7 @@ fun MangaToolbar(
     onClickDownload: ((DownloadAction) -> Unit)?,
     onClickEditCategory: (() -> Unit)?,
     onClickMigrate: (() -> Unit)?,
+    onClickCopyTags: (() -> Unit)?,
     // For action mode
     actionModeCounter: Int,
     onSelectAll: () -> Unit,
@@ -109,7 +110,7 @@ fun MangaToolbar(
                         Icon(Icons.Outlined.FilterList, contentDescription = stringResource(R.string.action_filter), tint = filterTint)
                     }
 
-                    if (onClickEditCategory != null || onClickMigrate != null || onClickShare != null) {
+                    if (onClickEditCategory != null || onClickMigrate != null || onClickShare != null || onClickCopyTags != null) {
                         OverflowMenu { closeMenu ->
                             if (onClickEditCategory != null) {
                                 DropdownMenuItem(
@@ -134,6 +135,15 @@ fun MangaToolbar(
                                     text = { Text(text = stringResource(R.string.action_share)) },
                                     onClick = {
                                         onClickShare()
+                                        closeMenu()
+                                    },
+                                )
+                            }
+                            if (onClickCopyTags != null) {
+                                DropdownMenuItem(
+                                    text = { Text(text = stringResource(R.string.action_copy_tags)) },
+                                    onClick = {
+                                        onClickCopyTags()
                                         closeMenu()
                                     },
                                 )

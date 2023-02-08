@@ -72,6 +72,7 @@ import eu.kanade.tachiyomi.ui.manga.ChapterItem
 import eu.kanade.tachiyomi.ui.manga.MangaScreenState
 import eu.kanade.tachiyomi.ui.manga.chapterDecimalFormat
 import eu.kanade.tachiyomi.util.lang.toRelativeString
+import eu.kanade.tachiyomi.util.system.copyToClipboard
 import tachiyomi.domain.chapter.model.Chapter
 import tachiyomi.domain.manga.model.Manga
 import java.text.DateFormat
@@ -117,6 +118,15 @@ fun MangaScreen(
     onAllChapterSelected: (Boolean) -> Unit,
     onInvertSelection: () -> Unit,
 ) {
+    val context = LocalContext.current
+    val onClickCopyTags: () -> Unit = {
+        val tags = state.manga.genre
+        if (!tags.isNullOrEmpty()) {
+            val tagString = tags.joinToString()
+            context.copyToClipboard(tagString, tagString)
+        }
+    }
+
     if (!isTabletUi) {
         MangaScreenSmallImpl(
             state = state,
@@ -135,6 +145,7 @@ fun MangaScreen(
             onRefresh = onRefresh,
             onContinueReading = onContinueReading,
             onSearch = onSearch,
+            onClickCopyTags = onClickCopyTags,
             onCoverClicked = onCoverClicked,
             onShareClicked = onShareClicked,
             onDownloadActionClicked = onDownloadActionClicked,
@@ -166,6 +177,7 @@ fun MangaScreen(
             onRefresh = onRefresh,
             onContinueReading = onContinueReading,
             onSearch = onSearch,
+            onClickCopyTags = onClickCopyTags,
             onCoverClicked = onCoverClicked,
             onShareClicked = onShareClicked,
             onDownloadActionClicked = onDownloadActionClicked,
@@ -200,6 +212,7 @@ private fun MangaScreenSmallImpl(
     onRefresh: () -> Unit,
     onContinueReading: () -> Unit,
     onSearch: (query: String, global: Boolean) -> Unit,
+    onClickCopyTags: () -> Unit,
 
     // For cover dialog
     onCoverClicked: () -> Unit,
@@ -259,6 +272,7 @@ private fun MangaScreenSmallImpl(
                 onClickDownload = onDownloadActionClicked,
                 onClickEditCategory = onEditCategoryClicked,
                 onClickMigrate = onMigrateClicked,
+                onClickCopyTags = onClickCopyTags,
                 actionModeCounter = chapters.count { it.selected },
                 onSelectAll = { onAllChapterSelected(true) },
                 onInvertSelection = { onInvertSelection() },
@@ -411,6 +425,7 @@ fun MangaScreenLargeImpl(
     onRefresh: () -> Unit,
     onContinueReading: () -> Unit,
     onSearch: (query: String, global: Boolean) -> Unit,
+    onClickCopyTags: () -> Unit,
 
     // For cover dialog
     onCoverClicked: () -> Unit,
@@ -474,6 +489,7 @@ fun MangaScreenLargeImpl(
                     onClickDownload = onDownloadActionClicked,
                     onClickEditCategory = onEditCategoryClicked,
                     onClickMigrate = onMigrateClicked,
+                    onClickCopyTags = onClickCopyTags,
                     actionModeCounter = chapters.count { it.selected },
                     onSelectAll = { onAllChapterSelected(true) },
                     onInvertSelection = { onInvertSelection() },
