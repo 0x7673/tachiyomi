@@ -5,6 +5,8 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.doOnLayout
+import androidx.recyclerview.widget.RecyclerView
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.IFlexible
 import eu.kanade.tachiyomi.databinding.SourceFilterSheetBinding
@@ -54,6 +56,12 @@ class SourceFilterSheet(
         init {
             recycler.adapter = adapter
             recycler.setHasFixedSize(true)
+            recycler.doOnLayout {
+                val mRecyclerView = it as RecyclerView
+                val params = mRecyclerView.layoutParams
+                params.height = mRecyclerView.height + 240
+                mRecyclerView.layoutParams = params
+            }
             (binding.root.getChildAt(1) as ViewGroup).addView(recycler)
             addView(binding.root)
             binding.filterBtn.setOnClickListener { onFilterClicked() }
